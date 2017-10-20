@@ -2,6 +2,8 @@
 
 #include "ofMain.h"
 #include "ofxGui.h"
+#include "ofxOpenCv.h"
+#include "ofxCvContourFinder.h"
 
 class ofApp : public ofBaseApp{
 
@@ -22,12 +24,18 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+    int camWidth, camHeight;
     ofVideoGrabber vidGrabber;
+    ofxCvColorImage colorImg;
+    ofxCvGrayscaleImage grayImg, grayBg, grayDiff;
+    ofxCvContourFinder contourFinder;
 
     void setupGui();
     ofxPanel panel;
+    ofxButton learnBackgroundButton;
     ofParameter<bool> toggleGuiDraw;
     ofParameter<bool> doFullScreen;
     void setFullScreen(bool& _value) { ofSetFullscreen(_value); }
+    void learnBackground();
 		
 };

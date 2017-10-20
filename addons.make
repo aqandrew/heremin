@@ -1,3 +1,4 @@
 ofxFlowTools
 ofxGui
 ofxOpenCv
+ofxOsc
