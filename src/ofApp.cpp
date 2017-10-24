@@ -15,6 +15,9 @@ void ofApp::setup(){
     grayBg.allocate(camWidth, camHeight);
     grayDiff.allocate(camWidth, camHeight);
 
+    // open an outgoing connection to HOST:PORT
+    sender.setup(HOST, PORT);
+
     setupGui();
 }
 
@@ -37,12 +40,49 @@ void ofApp::update(){
     //grab a new frame
     vidGrabber.update();
 
+    // Detect movement
     if (vidGrabber.isFrameNew()) {
         colorImg.setFromPixels(vidGrabber.getPixels());
         grayImg = colorImg; // convert our color image to a grayscale image
         grayDiff.absDiff(grayBg, grayImg);
         grayDiff.threshold(30);
-        contourFinder.findContours(grayDiff, (camWidth * camHeight) / 20, (camWidth * camHeight) / 4, 3, false);
+        contourFinder.findContours(grayDiff,
+                                   (camWidth * camHeight) / 20,
+                                   (camWidth * camHeight) / 4,
+                                   2,
+                                   false);
+
+        // Set the theremin controls if we detect two blobs
+        if (contourFinder.blobs.size() == 2) {
+            // Examine each blob
+            for (int i = 0; i < 2; ++i) {
+                ofPoint blobCentroid = contourFinder.blobs[i].centroid;
+
+                // Right blob = volume
+                if (blobCentroid[0] < camWidth / 2) {
+                    pVolume = blobCentroid;
+                }
+                // Left blob = pitch
+                else {
+                    pPitch = blobCentroid;
+                }
+            }
+
+            // Change volume/pitch no lower than the bottom half of the screen
+            float oscVolume = ofMap(pVolume[1], camHeight / 2, 0, 0, 1);
+            float oscPitch = ofMap(pPitch[1], camHeight / 2, 0, 261.63, 523.25); // C4 - C5
+
+            ofxOscMessage m;
+            m.setAddress("/heremin");
+            m.addFloatArg(oscVolume);
+            m.addFloatArg(oscPitch);
+            sender.sendMessage(m);
+            cout << "sending volume: " << m.getArgAsFloat(0) << ", pitch: " << m.getArgAsFloat(1) << endl;
+        }
+        // If blob number != 2, kill the noise
+        else {
+            pVolume.set(camWidth * 7 / 8, camHeight / 2);
+        }
     }
 }
 

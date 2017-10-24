@@ -4,6 +4,10 @@
 #include "ofxGui.h"
 #include "ofxOpenCv.h"
 #include "ofxCvContourFinder.h"
+#include "ofxOsc.h"
+
+#define HOST "localhost"
+#define PORT 12345
 
 class ofApp : public ofBaseApp{
 
@@ -24,12 +28,19 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+    // Camera stuff
     int camWidth, camHeight;
     ofVideoGrabber vidGrabber;
     ofxCvColorImage colorImg;
     ofxCvGrayscaleImage grayImg, grayBg, grayDiff;
     ofxCvContourFinder contourFinder;
 
+    // Sound stuff
+    ofPoint pVolume;
+    ofPoint pPitch;
+    ofxOscSender sender;
+
+    // GUI/helper stuff
     void setupGui();
     ofxPanel panel;
     ofxButton learnBackgroundButton;
