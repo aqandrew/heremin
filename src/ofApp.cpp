@@ -71,6 +71,7 @@ void ofApp::update(){
             // Change volume/pitch no lower than the bottom half of the screen
             float oscVolume = ofMap(pVolume[1], camHeight / 2, 0, 0, 1);
             float oscPitch = ofMap(pPitch[1], camHeight / 2, 0, 261.63, 523.25); // C4 - C5
+            oscVolume = oscVolume <= 0 ? 0 : oscVolume;
 
             ofxOscMessage m;
             m.setAddress("/heremin");
