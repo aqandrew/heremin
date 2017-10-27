@@ -15,6 +15,12 @@ void ofApp::setup(){
     grayBg.allocate(camWidth, camHeight);
     grayDiff.allocate(camWidth, camHeight);
 
+    // Don't kill the user's shoulders. We only care about the neck-up
+    colorImg.setROI(0, 0, camWidth, camHeight * 3 / 4);
+    grayImg.setROI(0, 0, camWidth, camHeight * 3 / 4);
+    grayBg.setROI(0, 0, camWidth, camHeight * 3 / 4);
+    grayDiff.setROI(0, 0, camWidth, camHeight * 3 / 4);
+
     // open an outgoing connection to HOST:PORT
     sender.setup(HOST, PORT);
 
@@ -47,7 +53,7 @@ void ofApp::update(){
         grayDiff.absDiff(grayBg, grayImg);
         grayDiff.threshold(30);
         contourFinder.findContours(grayDiff,
-                                   (camWidth * camHeight) / 20,
+                                   (camWidth * camHeight) / 25,
                                    (camWidth * camHeight) / 4,
                                    2,
                                    false);
