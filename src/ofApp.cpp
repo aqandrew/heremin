@@ -15,6 +15,8 @@ void ofApp::setup(){
     grayBg.allocate(camWidth, camHeight);
     grayDiff.allocate(camWidth, camHeight);
 
+    faceMask = ofRectangle(camWidth / 3, 0, camWidth / 3, camHeight);
+
     // Don't kill the user's shoulders. We only care about the neck-up
     colorImg.setROI(0, 0, camWidth, camHeight * 3 / 4);
     grayImg.setROI(0, 0, camWidth, camHeight * 3 / 4);
@@ -52,6 +54,9 @@ void ofApp::update(){
         grayImg = colorImg; // convert our color image to a grayscale image
         grayDiff.absDiff(grayBg, grayImg);
         grayDiff.threshold(30);
+
+        // TODO ignore regions shared by grayDiff and faceMask
+
         contourFinder.findContours(grayDiff,
                                    (camWidth * camHeight) / 25,
                                    (camWidth * camHeight) / 4,
@@ -95,6 +100,7 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    ofFill();
     ofSetColor(ofColor::white);
 //    vidGrabber.draw(0, 0, ofGetWidth(), ofGetHeight());
     vidGrabber.draw(0, 0, camWidth, camHeight);
@@ -107,6 +113,10 @@ void ofApp::draw(){
         ofPoint blobCentroid = contourFinder.blobs[i].centroid;
         ofDrawCircle(blobCentroid[0], blobCentroid[1], 10);
     }
+
+    // Show the ignored region
+    ofNoFill();
+    ofDrawRectangle(faceMask);
 
     if (toggleGuiDraw.get()) {
         ofDisableDepthTest();

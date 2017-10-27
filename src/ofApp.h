@@ -34,6 +34,7 @@ class ofApp : public ofBaseApp{
     ofxCvColorImage colorImg;
     ofxCvGrayscaleImage grayImg, grayBg, grayDiff;
     ofxCvContourFinder contourFinder;
+    ofRectangle faceMask;
 
     // Sound stuff
     ofPoint pVolume;
