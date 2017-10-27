@@ -8,8 +8,10 @@ OscMsg msg;
 12345 => oin.port;
 // create an address in the receiver
 oin.addAddress( "/heremin, f f" );
-float volume;
-float freq;
+
+//float volume;
+//float freq;
+SinOsc synth => Gain g => dac;
 
 // infinite event loop
 while ( true )
@@ -21,9 +23,10 @@ while ( true )
 	while ( oin.recv(msg) != 0 )
 	{ 
 		// getFloat fetches the expected float (as indicated by "f")
-		msg.getFloat(0) => volume;
-		msg.getFloat(1) => freq;
+		msg.getFloat(0) => g.gain;
+		msg.getFloat(1) => synth.freq;
+		
 		// print
-		<<< "got (via OSC) volume: ", volume, " pitch: ", freq >>>;
+		<<< "got (via OSC) volume: ", msg.getFloat(0), " pitch: ", msg.getFloat(1) >>>;
 	}
 }
