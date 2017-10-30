@@ -55,7 +55,14 @@ void ofApp::update(){
         grayDiff.absDiff(grayBg, grayImg);
         grayDiff.threshold(30);
 
-        // TODO ignore regions shared by grayDiff and faceMask
+        // Don't look for contours in regions of grayDiff that lie within faceMask
+        for (int i = 0; i < camWidth * camHeight; ++i) {
+            if (ofInRange(i % camWidth,
+                          faceMask.getX(),
+                          faceMask.getX() + faceMask.getWidth())) {
+                grayDiff.getPixels()[i] = 0;
+            }
+        }
 
         contourFinder.findContours(grayDiff,
                                    (camWidth * camHeight) / 25,
