@@ -140,10 +140,10 @@ void ofApp::draw(){
     if (toggleGuiDraw.get()) {
         ofDisableDepthTest();
         panel.draw();
-    }
 
-    if (!backgroundLearned) {
-        ofDrawBitmapString("press B to learn background", 10, camHeight - 20);
+        if (!backgroundLearned) {
+            ofDrawBitmapString("press B to learn background", 10, camHeight - 20);
+        }
     }
 }
 
@@ -265,5 +265,6 @@ void ofApp::nudgeMaskRightRight(){
 void ofApp::reset(){
     grayBg.set(1.0); // set all pixels to black
     backgroundLearned = false;
+    toggleGuiDraw.set(true);
     resetMask();
 }
