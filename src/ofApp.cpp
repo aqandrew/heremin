@@ -15,8 +15,7 @@ void ofApp::setup(){
     grayBg.allocate(camWidth, camHeight);
     grayDiff.allocate(camWidth, camHeight);
 
-    clearBackground();
-    resetMask();
+    reset();
 
     // Don't kill the user's shoulders. We only care about the neck-up
     colorImg.setROI(0, 0, camWidth, camHeight * 3 / 4);
@@ -41,8 +40,6 @@ void ofApp::setupGui(){
     panel.add(toggleGuiDraw.set("show GUI (G)", true));
     panel.add(learnBackgroundButton.setup("learn background (B)"));
     learnBackgroundButton.addListener(this, &ofApp::learnBackground);
-    panel.add(clearBackgroundButton.setup("clear background (N)"));
-    clearBackgroundButton.addListener(this, &ofApp::clearBackground);
     panel.add(nudgeMaskLLButton.setup("expand mask left (A)"));
     nudgeMaskLLButton.addListener(this, &ofApp::nudgeMaskLeftLeft);
     panel.add(nudgeMaskLRButton.setup("shrink mask left (S)"));
@@ -51,8 +48,10 @@ void ofApp::setupGui(){
     nudgeMaskRLButton.addListener(this, &ofApp::nudgeMaskRightLeft);
     panel.add(nudgeMaskRRButton.setup("expand mask right (L)"));
     nudgeMaskRRButton.addListener(this, &ofApp::nudgeMaskRightRight);
-    panel.add(resetMaskButton.setup("reset mask (R)"));
+    panel.add(resetMaskButton.setup("reset mask (M)"));
     resetMaskButton.addListener(this, &ofApp::resetMask);
+    panel.add(resetButton.setup("reset (R)"));
+    resetButton.addListener(this, &ofApp::reset);
     // TODO add fluid controls
 }
 
@@ -160,10 +159,7 @@ void ofApp::keyPressed(int key){
         case 'b':
             learnBackground();
             break;
-        case 'n':
-            clearBackground();
-            break;
-        case 'r':
+        case 'm':
             resetMask();
             break;
         case 'a':
@@ -177,6 +173,9 @@ void ofApp::keyPressed(int key){
             break;
         case 'l':
             nudgeMaskRightRight();
+            break;
+        case 'r':
+            reset();
             break;
     }
 }
@@ -238,12 +237,6 @@ void ofApp::learnBackground(){
 }
 
 //--------------------------------------------------------------
-void ofApp::clearBackground(){
-    grayBg.set(1.0); // set all pixels to black
-    backgroundLearned = false;
-}
-
-//--------------------------------------------------------------
 void ofApp::resetMask(){
     faceMask = ofRectangle(camWidth / 3, 0, camWidth / 3, camHeight);
 }
@@ -266,4 +259,11 @@ void ofApp::nudgeMaskRightLeft(){
 //--------------------------------------------------------------
 void ofApp::nudgeMaskRightRight(){
     faceMask.setWidth(faceMask.getWidth() + 10);
+}
+
+//--------------------------------------------------------------
+void ofApp::reset(){
+    grayBg.set(1.0); // set all pixels to black
+    backgroundLearned = false;
+    resetMask();
 }
