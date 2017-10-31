@@ -15,7 +15,7 @@ void ofApp::setup(){
     grayBg.allocate(camWidth, camHeight);
     grayDiff.allocate(camWidth, camHeight);
 
-    faceMask = ofRectangle(camWidth / 3, 0, camWidth / 3, camHeight);
+    resetMask();
 
     // Don't kill the user's shoulders. We only care about the neck-up
     colorImg.setROI(0, 0, camWidth, camHeight * 3 / 4);
@@ -40,6 +40,16 @@ void ofApp::setupGui(){
     panel.add(toggleGuiDraw.set("show GUI (G)", true));
     panel.add(learnBackgroundButton.setup("learn background (B)"));
     learnBackgroundButton.addListener(this, &ofApp::learnBackground);
+    panel.add(nudgeMaskLLButton.setup("expand mask left (A)"));
+    nudgeMaskLLButton.addListener(this, &ofApp::nudgeMaskLeftLeft);
+    panel.add(nudgeMaskLRButton.setup("shrink mask left (S)"));
+    nudgeMaskLRButton.addListener(this, &ofApp::nudgeMaskLeftRight);
+    panel.add(nudgeMaskRLButton.setup("shrink mask right (K)"));
+    nudgeMaskRLButton.addListener(this, &ofApp::nudgeMaskRightLeft);
+    panel.add(nudgeMaskRRButton.setup("expand mask right (L)"));
+    nudgeMaskRRButton.addListener(this, &ofApp::nudgeMaskRightRight);
+    panel.add(resetMaskButton.setup("reset mask (R)"));
+    resetMaskButton.addListener(this, &ofApp::resetMask);
     // TODO add fluid controls
 }
 
@@ -89,7 +99,7 @@ void ofApp::update(){
             // Change volume/pitch no lower than the bottom half of the screen
             float oscVolume = ofMap(pVolume[1], camHeight / 2, 0, 0, 1);
             float oscPitch = ofMap(pPitch[1], camHeight / 2, 0, 261.63, 523.25); // C4 - C5
-            oscVolume = oscVolume <= 0 ? 0 : oscVolume;
+            oscVolume = oscVolume <= 0 ? 0 : oscVolume; // negative volume doesn't make sense
 
             ofxOscMessage m;
             m.setAddress("/heremin");
@@ -142,6 +152,21 @@ void ofApp::keyPressed(int key){
             break;
         case 'b':
             learnBackground();
+            break;
+        case 'r':
+            resetMask();
+            break;
+        case 'a':
+            nudgeMaskLeftLeft();
+            break;
+        case 's':
+            nudgeMaskLeftRight();
+            break;
+        case 'k':
+            nudgeMaskRightLeft();
+            break;
+        case 'l':
+            nudgeMaskRightRight();
             break;
     }
 }
@@ -199,4 +224,29 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 //--------------------------------------------------------------
 void ofApp::learnBackground(){
     grayBg = grayImg; // update the background image
+}
+
+//--------------------------------------------------------------
+void ofApp::resetMask(){
+    faceMask = ofRectangle(camWidth / 3, 0, camWidth / 3, camHeight);
+}
+
+//--------------------------------------------------------------
+void ofApp::nudgeMaskLeftLeft(){
+    faceMask.set(ofPoint(faceMask.getLeft() - 10, faceMask.getTop()), faceMask.getWidth() + 10, camHeight);
+}
+
+//--------------------------------------------------------------
+void ofApp::nudgeMaskLeftRight(){
+    faceMask.set(ofPoint(faceMask.getLeft() + 10, faceMask.getTop()), faceMask.getWidth() - 10, camHeight);
+}
+
+//--------------------------------------------------------------
+void ofApp::nudgeMaskRightLeft(){
+    faceMask.setWidth(faceMask.getWidth() - 10);
+}
+
+//--------------------------------------------------------------
+void ofApp::nudgeMaskRightRight(){
+    faceMask.setWidth(faceMask.getWidth() + 10);
 }

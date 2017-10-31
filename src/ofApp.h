@@ -35,6 +35,11 @@ class ofApp : public ofBaseApp{
     ofxCvGrayscaleImage grayImg, grayBg, grayDiff;
     ofxCvContourFinder contourFinder;
     ofRectangle faceMask;
+    void resetMask();
+    void nudgeMaskLeftLeft();
+    void nudgeMaskLeftRight();
+    void nudgeMaskRightLeft();
+    void nudgeMaskRightRight();
 
     // Sound stuff
     ofPoint pVolume;
@@ -45,6 +50,11 @@ class ofApp : public ofBaseApp{
     void setupGui();
     ofxPanel panel;
     ofxButton learnBackgroundButton;
+    ofxButton nudgeMaskLLButton;
+    ofxButton nudgeMaskLRButton;
+    ofxButton nudgeMaskRLButton;
+    ofxButton nudgeMaskRRButton;
+    ofxButton resetMaskButton;
     ofParameter<bool> toggleGuiDraw;
     ofParameter<bool> doFullScreen;
     void setFullScreen(bool& _value) { ofSetFullscreen(_value); }
