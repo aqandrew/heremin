@@ -40,6 +40,9 @@ class ofApp : public ofBaseApp{
     void nudgeMaskLeftRight();
     void nudgeMaskRightLeft();
     void nudgeMaskRightRight();
+    bool backgroundLearned;
+    void learnBackground();
+    void clearBackground();
 
     // Sound stuff
     ofPoint pVolume;
@@ -50,6 +53,7 @@ class ofApp : public ofBaseApp{
     void setupGui();
     ofxPanel panel;
     ofxButton learnBackgroundButton;
+    ofxButton clearBackgroundButton;
     ofxButton nudgeMaskLLButton;
     ofxButton nudgeMaskLRButton;
     ofxButton nudgeMaskRLButton;
@@ -58,6 +62,5 @@ class ofApp : public ofBaseApp{
     ofParameter<bool> toggleGuiDraw;
     ofParameter<bool> doFullScreen;
     void setFullScreen(bool& _value) { ofSetFullscreen(_value); }
-    void learnBackground();
 		
 };

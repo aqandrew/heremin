@@ -15,6 +15,7 @@ void ofApp::setup(){
     grayBg.allocate(camWidth, camHeight);
     grayDiff.allocate(camWidth, camHeight);
 
+    clearBackground();
     resetMask();
 
     // Don't kill the user's shoulders. We only care about the neck-up
@@ -40,6 +41,8 @@ void ofApp::setupGui(){
     panel.add(toggleGuiDraw.set("show GUI (G)", true));
     panel.add(learnBackgroundButton.setup("learn background (B)"));
     learnBackgroundButton.addListener(this, &ofApp::learnBackground);
+    panel.add(clearBackgroundButton.setup("clear background (N)"));
+    clearBackgroundButton.addListener(this, &ofApp::clearBackground);
     panel.add(nudgeMaskLLButton.setup("expand mask left (A)"));
     nudgeMaskLLButton.addListener(this, &ofApp::nudgeMaskLeftLeft);
     panel.add(nudgeMaskLRButton.setup("shrink mask left (S)"));
@@ -139,6 +142,10 @@ void ofApp::draw(){
         ofDisableDepthTest();
         panel.draw();
     }
+
+    if (!backgroundLearned) {
+        ofDrawBitmapString("press B to learn background", 10, camHeight - 20);
+    }
 }
 
 //--------------------------------------------------------------
@@ -152,6 +159,9 @@ void ofApp::keyPressed(int key){
             break;
         case 'b':
             learnBackground();
+            break;
+        case 'n':
+            clearBackground();
             break;
         case 'r':
             resetMask();
@@ -224,6 +234,13 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 //--------------------------------------------------------------
 void ofApp::learnBackground(){
     grayBg = grayImg; // update the background image
+    backgroundLearned = true;
+}
+
+//--------------------------------------------------------------
+void ofApp::clearBackground(){
+    grayBg.set(1.0); // set all pixels to black
+    backgroundLearned = false;
 }
 
 //--------------------------------------------------------------
