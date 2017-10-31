@@ -4,6 +4,8 @@ A visual theremin, *here* in your webcam!
 
 Homework 2: Kinect || Camera, for Art & Code & Interactivity.
 
+![installation diagram](https://raw.githubusercontent.com/dawneraq/heremin/master/heremin_installation.png)
+
 ## Instructions
 
 0. Make sure you have [ChucK](http://chuck.cs.princeton.edu/) and [Xcode](https://developer.apple.com/xcode/) installed.
