@@ -119,6 +119,11 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    ofPushMatrix();
+
+    // Draw everything centered within the window
+    ofTranslate((ofGetWidth() - camWidth) / 2, 0);
+
     ofFill();
     ofSetColor(ofColor::white);
 //    vidGrabber.draw(0, 0, ofGetWidth(), ofGetHeight());
@@ -145,6 +150,8 @@ void ofApp::draw(){
             ofDrawBitmapString("press B to learn background", 10, camHeight - 20);
         }
     }
+
+    ofPopMatrix;
 }
 
 //--------------------------------------------------------------
