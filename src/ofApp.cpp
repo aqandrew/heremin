@@ -112,7 +112,7 @@ void ofApp::update(){
         }
         // If blob number != 2, kill the noise
         else {
-            pVolume.set(camWidth * 7 / 8, camHeight / 2);
+            silence();
         }
     }
 }
@@ -263,8 +263,14 @@ void ofApp::nudgeMaskRightRight(){
 
 //--------------------------------------------------------------
 void ofApp::reset(){
+    silence();
     grayBg.set(1.0); // set all pixels to black
     backgroundLearned = false;
     toggleGuiDraw.set(true);
     resetMask();
+}
+
+//--------------------------------------------------------------
+void ofApp::silence(){
+    pVolume.set(camWidth * 7 / 8, camHeight / 2);
 }

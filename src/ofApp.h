@@ -47,6 +47,7 @@ class ofApp : public ofBaseApp{
     // Sound stuff
     ofPoint pVolume;
     ofPoint pPitch;
+    void silence();
     ofxOscSender sender;
 
     // GUI/helper stuff
