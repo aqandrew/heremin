@@ -126,16 +126,17 @@ void ofApp::draw(){
 
     ofFill();
     ofSetColor(ofColor::white);
-//    vidGrabber.draw(0, 0, ofGetWidth(), ofGetHeight());
-    vidGrabber.draw(0, 0, camWidth, camHeight);
-    grayImg.draw(0, camHeight, camWidth / 3, camHeight / 3);
-    grayBg.draw(camWidth / 3, camHeight, camWidth / 3, camHeight / 3);
-    grayDiff.draw(camWidth * 2 / 3, camHeight, camWidth / 3, camHeight / 3);
+
+    // It's faster to draw everything mirrored than to mirror before processing
+    vidGrabber.draw(camWidth, 0, -camWidth, camHeight);
+    grayImg.draw(camWidth / 3, camHeight, -camWidth / 3, camHeight / 3);
+    grayBg.draw(camWidth * 2 / 3, camHeight, -camWidth / 3, camHeight / 3);
+    grayDiff.draw(camWidth, camHeight, -camWidth / 3, camHeight / 3);
 //    contourFinder.draw(0, 0);
 
     for (int i = 0; i < contourFinder.blobs.size(); ++i) {
         ofPoint blobCentroid = contourFinder.blobs[i].centroid;
-        ofDrawCircle(blobCentroid[0], blobCentroid[1], 10);
+        ofDrawCircle(camWidth - blobCentroid[0], blobCentroid[1], 10);
     }
 
     // Show the ignored region
